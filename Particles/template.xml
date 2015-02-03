@@ -1,0 +1,125 @@
+<MayaCache name="nParticleShape1">
+
+<properties>
+  <frames>24</frames>
+  <type> Particles </type>
+  <normalization>  Off </normalization>
+</properties>
+
+<files>
+  <input>
+    <path> /Users/fcucchietti/Dropbox/VizDataConversion/Particles/testcase/ </path>
+    <basename> inBase </basename>
+  </input>
+  <output>
+    <path> /Users/fcucchietti/Dropbox/VizDataConversion/Particles/testcase/ </path>
+    <basename> nParticleShape1 </basename>
+  </output>
+  <cacheXML>  
+    <path> /the/path/to/cache/xml </path>
+    <basename> MayaCacheXMLFileName </basename>
+  </cacheXML>
+</files>
+
+<channels>
+  <channel name="position">
+    <interpretation> position </interpretation>
+    <mayatype> FVCA </mayatype>
+    <source type="File">position</source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="velocity">
+    <interpretation> velocity </interpretation>
+    <mayatype> FVCA </mayatype>
+    <source type="File">velocity</source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="acceleration">
+    <interpretation> acceleration </interpretation>
+    <mayatype> FVCA </mayatype>
+    <source type="Constant" extend="True"> 0.0 </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="worldPosition">
+    <interpretation> worldPosition </interpretation>
+    <mayatype> FVCA </mayatype>
+    <source type="File">position</source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="worldVelocity">
+    <interpretation> worldVelocity </interpretation>
+    <mayatype> FVCA </mayatype>
+    <source type="File">velocity</source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="worldVelocityInObjectSpace">
+    <interpretation> worldVelocityInObjectSpace </interpretation>
+    <mayatype> FVCA </mayatype>
+    <source type="File">velocity</source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="mass">
+    <interpretation> mass </interpretation>
+    <mayatype> FBCA </mayatype>
+    <source type="Array" extend="True"> 0.5  </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="birthTtime">
+    <interpretation> birthTime </interpretation>
+    <mayatype> FBCA </mayatype>
+    <source type="Array" extend="True"> 0.001  </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="age">
+    <interpretation> age </interpretation>
+    <mayatype> FBCA </mayatype>
+    <source type="Array" extend="True"> 1.0  </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="finalLifespanPP">
+    <interpretation> finalLifespanPP </interpretation>
+    <mayatype> FBCA </mayatype>
+    <source type="Array" extend="True"> 1000000.0  </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="lifespanPP">
+    <interpretation> lifespanPP </interpretation>
+    <mayatype> FBCA </mayatype>
+    <source type="Array" extend="True"> 1000000.0  </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="rgbPP">
+    <interpretation> rgbPP </interpretation>
+    <mayatype> FVCA </mayatype>
+    <source type="File"> rgbPP  </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="opacityPP">
+    <interpretation> opacityPP </interpretation>
+    <mayatype> FBCA </mayatype>
+    <source type="Array" extend="True"> 1.0  </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="radiusPP">
+    <interpretation> radiusPP </interpretation>
+    <mayatype> FBCA </mayatype>
+    <source type="File"> radiusPP  </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+</channels>
+
+</MayaCache>
