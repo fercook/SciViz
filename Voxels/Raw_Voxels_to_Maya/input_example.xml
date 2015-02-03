@@ -1,0 +1,167 @@
+<MayaCache name="myfluidname">
+
+<properties>
+  <frames>120</frames>
+  <size> 10.24, 2.5, 10.24 </size>
+  <resolution> 128, 250, 128 </resolution>
+  <offset> 0,0,0 </offset>
+  <normalization>  Global </normalization>
+</properties>
+
+<files>
+  <input>
+    <path> ./RAWS/ </path>
+    <basename> rawfiles </basename>
+  </input>
+  <output>
+    <path> ./MAYA/ </path>
+    <basename> fluidcache </basename>
+  </output>
+  <cacheXML>  
+    <path> . </path>
+    <basename> myfluidname.xml </basename>
+  </cacheXML>
+</files>
+
+<channels>
+
+  <channel name="Density">
+    <interpretation> density </interpretation>
+    <type> FBCA </type>
+    <extension>VALUE</extension>
+    <normalization> 0.001, 1.0 </normalization>
+    <scale> Normal </scale>
+  </channel>
+
+  <channel name="Pressure">
+    <interpretation> temperature </interpretation>
+    <type> FBCA </type>
+    <extension>SCALAR</extension>
+    <normalization> Global </normalization>
+    <scale> Normal </scale>
+  </channel>
+
+  <channel name="velocity">
+    <interpretation> velocity </interpretation>
+    <mayatype> FVCA </mayatype>
+    <source type="File">VECTOR</source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+
+  <channel name="acceleration">
+    <interpretation> acceleration </interpretation>
+    <mayatype> FVCA </mayatype>
+    <source type="Constant" extend="True"> 0.5 </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+
+</channels>
+
+</MayaCache>
+
+
+These are all possible channels (FVCA is a 3D vector, FBCA is a scalar array)
+
+<channels>
+
+  <channel name="position">
+    <interpretation> position </interpretation>
+    <mayatype> FVCA </mayatype>
+    <source type="File">position</source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel> 
+  <channel name="velocity">
+    <interpretation> velocity </interpretation>
+    <mayatype> FVCA </mayatype>
+    <source type="File">velocity</source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="acceleration">
+    <interpretation> acceleration </interpretation>
+    <mayatype> FVCA </mayatype>
+    <source type="Constant" extend="True"> 0.0 </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="worldPosition">
+    <interpretation> worldPosition </interpretation>
+    <mayatype> FVCA </mayatype>
+    <source type="File">position</source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="worldVelocity">
+    <interpretation> worldVelocity </interpretation>
+    <mayatype> FVCA </mayatype>
+    <source type="File">velocity</source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="worldVelocityInObjectSpace">
+    <interpretation> worldVelocityInObjectSpace </interpretation>
+    <mayatype> FVCA </mayatype>
+    <source type="File">velocity</source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="mass">
+    <interpretation> mass </interpretation>
+    <mayatype> FBCA </mayatype>
+    <source type="Array" extend="True"> 0.5  </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="birthTtime">
+    <interpretation> birthTime </interpretation>
+    <mayatype> FBCA </mayatype>
+    <source type="Array" extend="True"> 0.001  </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="age">
+    <interpretation> age </interpretation>
+    <mayatype> FBCA </mayatype>
+    <source type="Array" extend="True"> 1.0  </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="finalLifespanPP">
+    <interpretation> finalLifespanPP </interpretation>
+    <mayatype> FBCA </mayatype>
+    <source type="Array" extend="True"> 1000000.0  </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="lifespanPP">
+    <interpretation> lifespanPP </interpretation>
+    <mayatype> FBCA </mayatype>
+    <source type="Array" extend="True"> 1000000.0  </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="rgbPP">
+    <interpretation> rgbPP </interpretation>
+    <mayatype> FVCA </mayatype>
+    <source type="File"> rgbPP  </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="opacityPP">
+    <interpretation> opacityPP </interpretation>
+    <mayatype> FBCA </mayatype>
+    <source type="Array" extend="True"> 1.0  </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+  <channel name="radiusPP">
+    <interpretation> radiusPP </interpretation>
+    <mayatype> FBCA </mayatype>
+    <source type="File"> radiusPP  </source>
+    <normalization> Off </normalization>
+    <scale> Normal </scale>
+  </channel>
+</channels>
