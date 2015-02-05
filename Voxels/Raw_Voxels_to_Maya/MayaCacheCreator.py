@@ -347,7 +347,7 @@ class CacheFile:
                 channelFullName = namesDict[channelName]
                 normalization = normDict[channelName]
                 scale = scaleDict[channelName]
-                oneChannel = CacheChannel(channelFullName,channelType,arrayLength,filename,normalization,scale)
+                oneChannel = CacheChannel(channelFullName,channelType,arrayLength,fileName,normalization,scale)
                 self.channels.append( oneChannel )
             else:
                 print "WARNING: Found some strangely named channel "+channelName
