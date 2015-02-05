@@ -62,7 +62,9 @@ def scale(x):
 
 TotalDataToRead = xres*yres*zres*times;
 TotalDataRead = 0;
-ChunkRead = 0;
+ChunkSize = xres*yres*zres;
+AccumulatedRead = 0;
+ChunksRead = 0;
 
 MinValueFound = 1.0E100;
 MaxValueFound = -1.0E100;
@@ -76,60 +78,54 @@ if Verbose:
     print("min as "+str(MinValue));
     print("Max as "+str(MaxValue));
 
-with open(filename, "wb") as file:
-    try:
-        header = array.array('I');
-        
-        header.append(xres);
-        header.append(yres);
-        header.append(zres);
-        header.append(times);        
-        header.tofile(file);
-        if Verbose: print("Header out");
-        
-        #skip the ncdump header
-        line = sys.stdin.readline();
-        while (line.find("data:") == -1) :
-            line = sys.stdin.readline();
-        line = sys.stdin.readline();
-        line = sys.stdin.readline();
-        
-        for line in sys.stdin:
-            linedata = line.split(',');
-            prepareddata = array.array('f');
-            for Strnumber in linedata:
-                #We need to check for the final ";" in the data
-                if Strnumber.find(";") > -1:
-                    Strnumber = Strnumber.replace(";","");
-                try:
-                    RawData = scale(float(Strnumber.strip()));
-                    NormalizedValue = max ( min( 1.0, (RawData-MinValue)/(MaxValue-MinValue) ) , 0.0);
-                    prepareddata.append(NormalizedValue);
-		    #if Verbose: print(str(RawData)+" converted to "+str(NormalizedValue));
-                    TotalDataRead = TotalDataRead + 1;
-		    if ((100*TotalDataRead) % TotalDataToRead==0): 
-			print(str((100.0*TotalDataRead)/TotalDataToRead)+" % done")
-                    MinValueFound = min (MinValueFound, RawData);
-                    MaxValueFound = max (MaxValueFound, RawData);
-                    if (TotalDataRead == TotalDataToRead):
-                        break;
-                except:
-                    continue;
-            if (len(prepareddata)>0):
-                prepareddata.tofile(file);
-	    #if Verbose: print("Read "+str(TotalDataRead ));
-            if (TotalDataRead == TotalDataToRead):                
+#skip the ncdump header
+line = sys.stdin.readline();
+while (line.find("data:") == -1) :
+    line = sys.stdin.readline();
+line = sys.stdin.readline();
+line = sys.stdin.readline();
+
+fil = open(filename+"."+str(ChunksRead).zfill(5),'wb')
+for line in sys.stdin:
+    linedata = line.split(',');
+    prepareddata = array.array('f');
+    for Strnumber in linedata:
+        #We need to check for the final ";" in the data
+        if Strnumber.find(";") > -1:
+            Strnumber = Strnumber.replace(";","");
+        try:
+            RawData = scale(float(Strnumber.strip()));
+            NormalizedValue = max ( min( 1.0, (RawData-MinValue)/(MaxValue-MinValue) ) , 0.0);
+            prepareddata.append(NormalizedValue);
+            #if Verbose: print(str(RawData)+" converted to "+str(NormalizedValue));
+            TotalDataRead = TotalDataRead + 1;
+            AccumulatedRead = AccumulatedRead +1;
+            if (AccumulatedRead == ChunkSize): #We should finish up the frame
+                prepareddata.tofile(fil);
+                fil.flush();
+                fil.close();
+                ChunksRead = ChunksRead + 1;
+                AccumulatedRead = 0;
+                fil = open(filename+"."+str(ChunksRead).zfill(5),'wb')
+            if ((100*TotalDataRead) % TotalDataToRead==0): 
+                print(str((100.0*TotalDataRead)/TotalDataToRead)+" % done")
+            MinValueFound = min (MinValueFound, RawData);
+            MaxValueFound = max (MaxValueFound, RawData);
+            if (TotalDataRead == TotalDataToRead):
                 break;
-        
-        file.flush();
-        file.close();
-        
-        print "Maximum Value Found :"+str(MaxValueFound);
-        print "Minimum Value Found :"+str(MinValueFound);
-        print " but wrote in the range "+str(MinValue)+"--"+str(MaxValue);
-        
-        if ( TotalDataToRead != TotalDataRead):
-            print "Some error occurred, expected "+str(TotalDataToRead)+" points and found "+str(TotalDataRead);
-    
-    except IOError as e:
-        print ("Some file error occurred");
+        except:
+            continue;
+    if (len(prepareddata)>0):
+        prepareddata.tofile(fil);
+    if (TotalDataRead == TotalDataToRead):                
+        break;
+
+fil.flush();
+fil.close();
+
+print "Maximum Value Found :"+str(MaxValueFound);
+print "Minimum Value Found :"+str(MinValueFound);
+print " but wrote in the range "+str(MinValue)+"--"+str(MaxValue);
+
+if ( TotalDataToRead != TotalDataRead):
+    print "Some error occurred, expected "+str(TotalDataToRead)+" points and found "+str(TotalDataRead);
