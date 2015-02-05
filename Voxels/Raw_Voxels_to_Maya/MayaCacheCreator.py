@@ -523,6 +523,9 @@ if Normalization != None:
       elif channelNormalization[channel].title() != "Local":
         minim, maxim = map(float, channelNormalization[channel].split(','))
         channelNormalization[channel] = [ minim, maxim ]
+else:
+  for channel in channelNames.keys():
+    channelNormalization[channel] = None
         
 # For now, time increment is fixed.
 dt = 250
