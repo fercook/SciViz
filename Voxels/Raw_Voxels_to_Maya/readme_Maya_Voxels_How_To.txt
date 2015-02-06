@@ -41,7 +41,7 @@ where base name is the same for all channels, VARIABLE is whatever you want (one
 BigBox.DENSITY.00074
 
 12) Fill in the XML input file for the converter. Here you will describe the resolution of the data, the number of frames, where are the input and output files (as well as their basenames), but very importantly you need to describe the channels that you want to import, wether you want them normalized globally or locally (in each frame), or if you want a logarithmic scale, and so on.
-Important: The channelsBaseName that goes here is the one you chose in point 6. However, the outputBaseName must be the cache files name you chose in 7.1.
+Important: The MayaCache name that goes in the first line is the one you chose in point 6. However, the output BaseName must be the cache files name you chose in 7.1.
 
 13) Run the converter
 python MayaCacheCreator.py -f input.xml
