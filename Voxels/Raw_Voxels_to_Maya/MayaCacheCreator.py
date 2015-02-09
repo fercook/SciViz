@@ -468,7 +468,7 @@ xmlProperties = xmlRoot.find('properties')
 numFrames = int(xmlProperties.find('frames').text)
 resolution = map ( int , xmlProperties.find('resolution').text.split(',') )
 boxSize = map ( float , xmlProperties.find('size').text.split(',') ) 
-offset = map ( float , xmlProperties.find('size').text.split(',') ) 
+offset = map ( float , xmlProperties.find('offset').text.split(',') ) 
 Normalization = xmlProperties.find('normalization').text.strip().title()
 if Normalization == "Off":
     Normalization = None
