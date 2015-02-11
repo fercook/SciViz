@@ -12,12 +12,14 @@
 
 usage = '''
 Usage: \n
-conrec(datamatrix, Xpositions, Ypositions, Levels) \n
+conrec(datamatrix, Xpositions, Ypositions, Levels, ["JSON"]) \n
 Returns a list of lists, one collection of lists for each level in Levels: \n
 [ [ [ [x1,y1],[x2,y2],... ], [ [x1,y1],[x2,y2],... ], ... ],  (list of curves for Levels[0] )
   [ [ [x1,y1],[x2,y2],... ], [ [x1,y1],[x2,y2],... ], ... ],  (list of curves for Levels[1] )
   ....
 ]
+
+If "JSON" is included as an option, it returns the list of paths and levels converted to JSON format.
 '''
 print (usage)
 
