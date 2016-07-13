@@ -1,0 +1,83 @@
+#!/bin/bash
+
+ulimit -s unlimited
+
+if [[ ! -r "$1" ]]; then
+  echo "ERROR: Cannot read configuration file \"$1\"" >&2
+  exit -1
+fi
+source "$1"
+if [[ $? -ne 0 ]]; then
+  echo "ERROR: Cannot load configuration file \"$1\"" >&2
+  exit -2
+fi
+
+if [[ -z "$WALLCLOCK" || -z "$NNODES" || -z "$NTASKS_PER_NODE" || -z "$INPUT_FILE" || -z "$OUTPUT_DIR" || -z "$VARIABLES_TO_BE_EXTRACTED" ]]; then
+  echo "ERROR: WALLCLOCK, NNODES, NTASKS_PER_NODE, INPUT_FILE, OUTPUT_DIR, and VARIABLES_TO_BE_EXTRACTED must be set." >&2
+  exit -3
+fi
+if [[ ! -r "$INPUT_FILE" ]]; then
+  echo "ERROR: Cannot access to INPUT_FILE." >&2
+  exit -4
+fi
+mkdir -p "$OUTPUT_DIR"
+if [[ $? -ne 0 ]]; then
+  echo "ERROR: Cannot create OUTPUT_DIR." >&2
+  exit -5
+fi
+VARIABLES_TO_BE_EXTRACTED=$(echo "$VARIABLES_TO_BE_EXTRACTED" | tr -d " " | tr "," "\n")
+DIMENSIONS_TO_BE_REDUCED=$(echo "$DIMENSIONS_TO_BE_REDUCED" | tr -d " ")
+
+module purge &> /dev/null
+module load gcc/4.7.2 intel/14.0.2 impi/4.1.3.049 SZIP/2.1 HDF5/1.8.15p1 NETCDF/4.3.3.1-parallel &> /dev/null
+
+if [[ -z "$START_FRAME" || $START_FRAME -lt 0 ]]; then
+  START_FRAME=0
+fi
+MAX_FRAME=$(ncdump -v time "$INPUT_FILE" | sed -e '1,/data:/d' -e '$d' | grep -o ',' | wc -l)
+if [[ -z "$END_FRAME" || $END_FRAME -gt $MAX_FRAME ]]; then
+  END_FRAME=$MAX_FRAME
+fi
+unset MAX_FRAME
+if [[ $START_FRAME -gt $END_FRAME ]]; then
+  TMP_FRAME=$START_FRAME
+  START_FRAME=$END_FRAME
+  END_FRAME=$TMP_FRAME
+  unset TMP_FRAME
+fi
+
+if [[ -z "$XFACTOR" ]]; then
+  XFACTOR="1.0"
+fi
+if [[ -z "$YFACTOR" ]]; then
+  YFACTOR="1.0"
+fi
+if [[ -z "$ZFACTOR" ]]; then
+  ZFACTOR="1.0"
+fi
+
+export NSOCKETS=$(cat /proc/cpuinfo | grep "physical id" | awk '!a[$0]++' | wc -l)
+NCORES_PER_SOCKET=$(cat /proc/cpuinfo | grep "core id" | awk '!a[$0]++' | wc -l)
+export NCORES=$(($NSOCKETS * $NCORES_PER_SOCKET))
+unset NCORES_PER_SOCKET
+export NTASKS=$(($NNODES * $NTASKS_PER_NODE))
+export NNODES
+export NTASKS_PER_NODE
+export INPUT_FILE
+export OUTPUT_DIR
+export VARIABLES_TO_BE_EXTRACTED
+export DIMENSIONS_TO_BE_REDUCED
+export START_FRAME
+export END_FRAME
+export XFACTOR
+export YFACTOR
+export ZFACTOR
+if [[ -n "$EXTRACT_DEM_VARIABLE" ]]; then
+  export EXTRACT_DEM_VARIABLE
+  export DEM_MASSAGE
+  export DEM_XFACTOR
+  export DEM_YFACTOR
+  export DEM_ZFACTOR
+fi
+
+bsub -J "NC2VTKVoxel2BVOX" -W $WALLCLOCK -n $NTASKS -R "span[ptile=$NTASKS_PER_NODE]" -x -cwd "$OUTPUT_DIR" -oo "NC2VTKVoxel2BVOX_%J.out" -eo "NC2VTKVoxel2BVOX_%J.err" "$(dirname $(readlink -e $0) )/job/job_script.sh"

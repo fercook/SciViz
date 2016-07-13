@@ -1,0 +1,7 @@
+Execute:
+
+  ~> /gpfs/projects/bsc21/visualization/bin/NC2VTKVoxel2BVOX/NC2VTKVoxel2BVOX CONFIG_FILE.conf
+
+and enjoy!
+
+See NC2VTKVoxel2BVOX.conf for a example of configuration file.
