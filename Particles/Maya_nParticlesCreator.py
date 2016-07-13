@@ -64,7 +64,7 @@ Input file format (XML)
     <path> /the/path/to/binary/output </path>
     <basename> OutputFilesBaseName </basename>
   </output>
-  <cacheXML>  
+  <cacheXML>
     <path> /the/path/to/cache/xml </path>
     <basename> MayaCacheXMLFileName </basename>
   </cacheXML>
@@ -98,65 +98,65 @@ From Maya's documentation:
 Overview of Maya Caches:
 ========================
 
-Conceptually, a Maya cache consists of 1 or more channels of data.  
+Conceptually, a Maya cache consists of 1 or more channels of data.
 Each channel has a number of properties, such as:
 
-- start/end time 
+- start/end time
 - data type of the channel (eg. "DoubleVectorArray" to represents a point array)
 - interpretation (eg. "positions" the vector array represents position data, as opposed to per vertex normals, for example)
 - sampling type (eg. "regular" or "irregular")
 - sampling rate (meaningful only if sampling type is "regular")
 
-Each channel has a number of data points in time, not necessarily regularly spaced, 
-and not necessarily co-incident in time with data in other channels.  
+Each channel has a number of data points in time, not necessarily regularly spaced,
+and not necessarily co-incident in time with data in other channels.
 At the highest level, a Maya cache is simply made up of channels and their data in time.
 
-On disk, the Maya cache is made up of a XML description file, and 1 or more data files.  
-The description file provides a high level overview of what the cache contains, 
-such as the cache type (one file, or one file per frame), channel names, interpretation, etc.  
-The data files contain the actual data for the channels.  
-In the case of one file per frame, a naming convention is used so the cache can check its 
+On disk, the Maya cache is made up of a XML description file, and 1 or more data files.
+The description file provides a high level overview of what the cache contains,
+such as the cache type (one file, or one file per frame), channel names, interpretation, etc.
+The data files contain the actual data for the channels.
+In the case of one file per frame, a naming convention is used so the cache can check its
 available data at runtime.
 
 Here is a visualization of the data format of the OneFile case:
 
-//  |---CACH (Group)	// Header
-//  |     |---VRSN		// Version Number (char*)
-//  |     |---STIM		// Start Time of the Cache File (int)
-//  |     |---ETIM		// End Time of the Cache File (int)
+//  |---CACH (Group)    // Header
+//  |     |---VRSN        // Version Number (char*)
+//  |     |---STIM        // Start Time of the Cache File (int)
+//  |     |---ETIM        // End Time of the Cache File (int)
 //  |
-//  |---MYCH (Group)	// 1st Time 
-//  |     |---TIME		// Time (int)
-//  |     |---CHNM		// 1st Channel Name (char*)
-//  |     |---SIZE		// 1st Channel Size
-//  |     |---DVCA		// 1st Channel Data (Double Vector Array)
-//  |     |---CHNM		// n-th Channel Name
-//  |     |---SIZE		// n-th Channel Size
-//  |     |---DVCA		// n-th Channel Data (Double Vector Array)
+//  |---MYCH (Group)    // 1st Time
+//  |     |---TIME        // Time (int)
+//  |     |---CHNM        // 1st Channel Name (char*)
+//  |     |---SIZE        // 1st Channel Size
+//  |     |---DVCA        // 1st Channel Data (Double Vector Array)
+//  |     |---CHNM        // n-th Channel Name
+//  |     |---SIZE        // n-th Channel Size
+//  |     |---DVCA        // n-th Channel Data (Double Vector Array)
 //  |     |..
 //  |
-//  |---MYCH (Group)	// 2nd Time 
-//  |     |---TIME		// Time
-//  |     |---CHNM		// 1st Channel Name
-//  |     |---SIZE		// 1st Channel Size
-//  |     |---DVCA		// 1st Channel Data (Double Vector Array)
-//  |     |---CHNM		// n-th Channel Name
-//  |     |---SIZE		// n-th Channel Size
-//  |     |---DVCA		// n-th Channel Data (Double Vector Array)
+//  |---MYCH (Group)    // 2nd Time
+//  |     |---TIME        // Time
+//  |     |---CHNM        // 1st Channel Name
+//  |     |---SIZE        // 1st Channel Size
+//  |     |---DVCA        // 1st Channel Data (Double Vector Array)
+//  |     |---CHNM        // n-th Channel Name
+//  |     |---SIZE        // n-th Channel Size
+//  |     |---DVCA        // n-th Channel Data (Double Vector Array)
 //  |     |..
 //  |
 //  |---..
-//	|
+//    |
 //
 
-In a multiple file caches, the only difference is that after the 
-header "CACH" group, there is only one MYCH group and there is no 
-TIME chunk.	In the case of one file per frame, the time is part of 
-the file name - allowing Maya to scan at run time to see what data 
-is actually available, and it allows users to move data in time by 
-manipulating the file name.  
+In a multiple file caches, the only difference is that after the
+header "CACH" group, there is only one MYCH group and there is no
+TIME chunk.    In the case of one file per frame, the time is part of
+the file name - allowing Maya to scan at run time to see what data
+is actually available, and it allows users to move data in time by
+manipulating the file name.
 
-!Note that it's not necessary to have data for every channel at every time.  
+!Note that it's not necessary to have data for every channel at every time.
 
 """
 
@@ -168,7 +168,7 @@ platform = sys.platform
 needSwap = False
 #This code does not work...
 if re.compile("win").match(platform) != None :
-    needSwap = True            
+    needSwap = True
 if re.compile("linux").match(platform) != None :
     needSwap = True
 # So I need to swap bytes because I always work on Intel arch.
@@ -177,30 +177,30 @@ needSwap = True
 def fileFormatError():
     print "Error: unable to read cache format\n";
     sys.exit(2)
-    
+
 def readInt(fd):
-    intArray = array.array('i')    
+    intArray = array.array('i')
     intArray.fromfile(fd,1)
-    if needSwap:    
+    if needSwap:
         intArray.byteswap()
-    return intArray[0]        
+    return intArray[0]
 
 def writeInt(theInt,fd):
     intArray = array.array('i')
     intArray.append(theInt)
-    if needSwap:    
+    if needSwap:
         intArray.byteswap()
     intArray.tofile(fd)
 
 def writeFloat(theFloat,fd):
     floatArray = array.array('f')
     floatArray.append(theFloat)
-    if needSwap:    
+    if needSwap:
         floatArray.byteswap()
     floatArray.tofile(fd)
 
 def writeFloatArray(theFloatArray,fd):
-    if needSwap:    
+    if needSwap:
         theFloatArray.byteswap()
     theFloatArray.tofile(fd)
 
@@ -215,7 +215,7 @@ class CacheChannel:
     source = ""
     def __init__(self,channelName,channelType,arrayLength,source,normalization=None,scale=None):
         self.name = channelName
-        self.type = channelType                
+        self.type = channelType
         self.arrayLength = arrayLength
         self.source = source
         self.maxBufferLength = 4000000
@@ -224,7 +224,7 @@ class CacheChannel:
         if channelType == "FVCA":
             #FVCA == Float Vector Array 3 * 4
             self.typeLength = 3*4
-        elif channelType == "DVCA":                    
+        elif channelType == "DVCA":
             #DVCA == Double Vector Array 8 * 3
             self.typeLength = 3*8
         elif channelType == "DBLA":
@@ -243,7 +243,7 @@ class CacheChannel:
         # TAG: Channel name
         outFile.write("CHNM")                     # 4 bytes
                                                   # How many bytes for channel name
-        chnmSize = len(self.name)               
+        chnmSize = len(self.name)
         writeInt(chnmSize+1,outFile)       # For some reason the size is written as +1
                                          # Channel name
         outFile.write(self.name)           # name bytes
@@ -257,7 +257,7 @@ class CacheChannel:
         if paddingSize > 0:
             Zero=array.array('b')
             Zero.append(0)
-            for n in range(paddingSize):               
+            for n in range(paddingSize):
                 Zero.tofile(outFile)
                 # TAG: Length of array
         outFile.write("SIZE")                     # 4 bytes
@@ -265,7 +265,7 @@ class CacheChannel:
         numBytes = 4
         writeInt(numBytes,outFile)       # 4 bytes
                                          # Length of array in the channel
-        arrayLength = self.arrayLength    
+        arrayLength = self.arrayLength
         writeInt(arrayLength,outFile)    # 4 bytes
                                          # TAG: Type of array
         outFile.write(self.type)           # 4 bytes
@@ -283,7 +283,7 @@ class CacheChannel:
          mydataout.byteswap()
       for rep in range(repetitions):
         mydataout.tofile(outFile)
-    
+
     def getBlockSize(self):
             blockSize = 4 # CHMN
             blockSize += 4 # Channel name size
@@ -302,7 +302,7 @@ class CacheChannel:
             blockSize += bufferSize
             print ("Returning channel "+self.name+" size "+str(blockSize))
             return blockSize
-          
+
 
 class CacheChannelFromFile(CacheChannel):
     def writeDataToFile(self,outFile,bufferLength):
@@ -340,12 +340,12 @@ class CacheChannelFromFile(CacheChannel):
             dataout.tofile(outFile)
             bytesRead += byteChunk*4
         inFile.close()
-       
+
 class CacheFile:
     cacheStartTime = 0
     cacheEndTime = 0
     channels = []
-    
+
     ########################################################################
     #   Description:
     #       Class constructor - tries to figure out how many input files
@@ -361,15 +361,15 @@ class CacheFile:
     ########################################################################
     # Description:
     #   method to write the contents of the data file, for the
-    #   file per frame case ("OneFilePerFrame")             
-    def writeDataFilePerFrame(self,fileName):    
+    #   file per frame case ("OneFilePerFrame")
+    def writeDataFilePerFrame(self,fileName):
 
         if Verbose:
-            print "--------------------------------------------------------------\n"      
-            print "Writing cache data file: "+fileName        
+            print "--------------------------------------------------------------\n"
+            print "Writing cache data file: "+fileName
 
         fd = open(fileName,"wb")
-        
+
         # TAG: Initial tag is FOR4, indicating 4 byte numbers(this is for less than 2GB files)
         fd.write("FOR4")
         #Next comes number of bytes in header. For now it's always 40
@@ -399,8 +399,8 @@ class CacheFile:
         writeInt(numBytes,fd)
         # End time ///////////CHECK OUT
         numBytes = self.cacheEndTime
-        writeInt(numBytes,fd)    
-        # END MAIN HEADER       
+        writeInt(numBytes,fd)
+        # END MAIN HEADER
 
         # START CHANNEL HEADERS
         # TAG: Initial tag is always FOR4 or FOR8
@@ -408,21 +408,21 @@ class CacheFile:
         #Next comes number of bytes in this block
         blockSize = 4 #MYCH Header
         for dataChannel in self.channels:
-            blockSize += dataChannel.getBlockSize()           
+            blockSize += dataChannel.getBlockSize()
         writeInt(blockSize,fd)
-        
+
         # TAG: Next is all channel information
-        fd.write("MYCH")   
+        fd.write("MYCH")
         for dataChannel in self.channels:
             #            if Verbose:
-                #                print "Saving channel "+dataChannel.name 
+                #                print "Saving channel "+dataChannel.name
             dataChannel.writeToFile(fd)
             #
         # Close all and go home
         fd.close()
         if Verbose:
             print "All  channels saved\n"
-            print "--------------------------------------------------------------\n"      
+            print "--------------------------------------------------------------\n"
 
             # ************************************************************
             # ************************************************************
@@ -448,7 +448,7 @@ if len(opts) == 0:
 inputXMLFileName = ""
 for o,a in opts:
     if o == "-f":
-        inputXMLFileName = a    
+        inputXMLFileName = a
 
 xmlTree = cElementTree.parse(inputXMLFileName)
 xmlRoot = xmlTree.getroot()
@@ -460,7 +460,7 @@ cacheType = xmlProperties.find('type').text.strip().title()
 
 if (cacheType == "Fluids"):
   resolution = map ( int , xmlProperties.find('resolution').text.split(',') )
-  boxSize = map ( float , xmlProperties.find('size').text.split(',') ) 
+  boxSize = map ( float , xmlProperties.find('size').text.split(',') )
   offset = map ( float , xmlProperties.find('offset').text.split(',') )
 else:
   numberofparticles = int (xmlProperties.find('type').attrib['number'].strip())
@@ -496,7 +496,7 @@ for xmlChannel in xmlChannels:
     channelScale[base] = xmlChannel.find('scale').text.strip().title()
     sourcetype= xmlChannel.find('source').attrib['type'].title()
     if (sourcetype=="Array" or sourcetype=="Constant"):
-      data = map(float, xmlChannel.find('source').text.strip().split(',')) 
+      data = map(float, xmlChannel.find('source').text.strip().split(','))
       channelSources[base] = [ sourcetype, data ]
       if (xmlChannel.find('source').attrib['extend'].title() == "True"):
         channelSizes[base] = -1
@@ -537,7 +537,7 @@ if Normalization != None:
       elif channelNormalization[channel]!= None and channelNormalization[channel].title() != "Local":
         minim, maxim = map(float, channelNormalization[channel].split(','))
         channelNormalization[channel] = [ minim, maxim ]
-        
+
 # For now, time increment is fixed.
 dt = 250
 
@@ -552,14 +552,26 @@ for frame in range(1,numFrames+1):
     channels = []
     #  Header channels for particles
     if (cacheType == "Particles"):
+       #Need to find out number of particles first
+       if (numberofparticles<0):
+            randomChannelName = channelNames.keys()[0]
+            channelType = channelTypes[randomChannelName]
+            fileName = os.path.join(inputPath,inputBaseName+"."+channelSources[randomChannelName][1]+"."+str(frame).zfill(5))
+            if channelType=="FVCA":
+                  dataLength = 3
+              else:
+                  dataLength = 1
+            frameParticles = os.path.getsize(source)/(dataLength*4)
+       else:
+          frameParticles = numberofparticles
        #Particle caches always carry total count and Id channels at the beggining
        channelType = "FBCA"
        channelFullName = channelsBaseName+"_id"
        normalization = None
        scale = "Normal"
        # Ids are invented...they could come from a file ###################
-       source = map( float, range(numberofparticles) ) 
-       arrayLength = numberofparticles
+       source = map( float, range(frameParticles) )
+       arrayLength = frameParticles
        oneChannel = CacheChannel(channelFullName,channelType,arrayLength,source,normalization,scale)
        channels.append( oneChannel )
        #####
@@ -567,12 +579,12 @@ for frame in range(1,numFrames+1):
        channelFullName = channelsBaseName+"_count"
        normalization = None
        scale = "Normal"
-       source = [float(numberofparticles)]
+       source = [float(frameParticles)]
        arrayLength = len(source)
        oneChannel = CacheChannel(channelFullName,channelType,arrayLength,source,normalization,scale)
        channels.append( oneChannel )
-       ##### 
-    #  Actual data channels 
+       #####
+    #  Actual data channels
     for channelName in sorted(channelNames.keys()):
        channelType = channelTypes[channelName]
        channelFullName = channelNames[channelName]
@@ -584,7 +596,7 @@ for frame in range(1,numFrames+1):
           if (channelSizes[channelName] > 0):
               arrayLength = channelSizes[channelName]
           else:
-              arrayLength = numberofparticles
+              arrayLength = frameParticles
           oneChannel = CacheChannel(channelFullName,channelType,arrayLength,source,normalization,scale)
        else:
           source = os.path.join(inputPath,inputBaseName+"."+channelSources[channelName][1]+"."+str(frame).zfill(5))
@@ -618,12 +630,12 @@ for frame in range(1,numFrames+1):
        arrayLength = len(offset)
        oneChannel = CacheChannel(channelFullName,channelType,arrayLength,source,normalization,scale)
        channels.append( oneChannel )
-       
+
     aCache = CacheFile(time,time+dt,channels)
     cacheFiles.append( aCache )
 
 # Write the data files
-frame=1    
+frame=1
 for cache in cacheFiles:
     print str(frame)
     fileName = os.path.join(outputpath,outputBaseName+"Frame"+str(frame)+".mc")
@@ -674,10 +686,10 @@ if (cacheType == "Fluids"):
     channels_out_xml=channels_out_xml+channelxml.replace("NUM",str(nc+1)).replace("CHANNELNAME",channelsBaseName+"_offset").replace("CHANNELTYPE","FloatArray").replace("CHANNELINTERPRETATION","offset").replace("FINALTIME",str(endtime))
 
 
-fxml = open ( os.path.join(outputpath,outputBaseName+".xml"),'w') 
+fxml = open ( os.path.join(outputpath,outputBaseName+".xml"),'w')
 fxml.write(header.replace("FINALTIME",str(endtime)))
 fxml.write(channels_out_xml)
 fxml.write(tailer)
 fxml.close()
-    
-   
+
+
