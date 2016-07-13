@@ -115,6 +115,7 @@ for line in sys.stdin:
                 fil.close();
                 ChunksRead = ChunksRead + 1;
                 AccumulatedRead = 0;
+                prepareddata = array.array('f');
                 fil = open(filename+"."+str(ChunksRead).zfill(5),'wb')
             if ((100*TotalDataRead) % TotalDataToRead==0): 
                 print(str((100.0*TotalDataRead)/TotalDataToRead)+" % done")
