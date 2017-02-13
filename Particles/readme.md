@@ -3,19 +3,19 @@ The python script is configured from the xml file, look at the template. Here is
 File names
 ==========
 
-Binary files must be named in the following way
+Binary files must be named like in the following example
 
-BaseName.CHANNEL.frame
-inputXMLFileName = "" # Read info from input file
-outputBaseName = "lleno"
-channelsBaseName = "fluidShape1"
-inputBaseName = "color"
-numFrames = 24
-resolution = [3,4,5]
-boxSize = [3,4,5]
-channelNames = {} # CHANNEL, MayaChannelName
-channelNames['DENSITY']=channelsBaseName+'_density'
-channelNames['TEMPERATURE']=channelsBaseName+'_temperature'
+BaseName.CHANNEL.frame  
+inputXMLFileName = "" # Read info from input file  
+outputBaseName = "lleno"  
+channelsBaseName = "fluidShape1"  
+inputBaseName = "color"  
+numFrames = 24  
+resolution = [3,4,5]  
+boxSize = [3,4,5]  
+channelNames = {} # CHANNEL, MayaChannelName  
+channelNames['DENSITY']=channelsBaseName+'_density'  
+channelNames['TEMPERATURE']=channelsBaseName+'_temperature'  
 
 Input file example (XML)
 ======================
