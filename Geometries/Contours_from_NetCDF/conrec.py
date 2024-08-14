@@ -172,7 +172,7 @@ def conrec(data,x,y,levels,format="PYTHON"):
                 if (dist(apath[0], segment[1])<EPSILON): #segment points to our path
                     segment = levelsegments.pop(idx) #remove from the searchable list
                     apath.insert(0,segment[0])
-                elif(dist(apath[-1],segment[0])): #our path continues on segment
+                elif(dist(apath[-1],segment[0])<EPSILON): #our path continues on segment
                     segment = levelsegments.pop(idx) #remove from the searchable list
                     apath.append(segment[1])
                 else:
